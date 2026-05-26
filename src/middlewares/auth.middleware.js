@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken'
 
-import { JWT_EXPIRES_IN } from "../config/env.js"
+import { JWT_EXPIRES_IN, JWT_SECRET } from "../config/env.js"
 import User from '../models/user.model.js'
 
 const authorize = async (req, res, next) => {
@@ -13,7 +13,7 @@ const authorize = async (req, res, next) => {
 
         if(!token) return res.status(401).json({ message: 'Unauthorized' });
 
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const decoded = jwt.verify(token, JWT_SECRET);
 
         const user = await User.findById(decoded.userId);
 
