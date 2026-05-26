@@ -48,7 +48,6 @@ const subscriptionSchema = new mongoose.Schema( {
     },
     renewalDate: {
             type: Date,
-            required: true,
             validate: {
                 validator: function (value) {
                     return value > this.startDate;
@@ -65,7 +64,7 @@ const subscriptionSchema = new mongoose.Schema( {
 
 }, { timestamps: true });
 
-subscriptionSchema.pre('save', function (next) {
+subscriptionSchema.pre('save', async function () {
     if(!this.renewalDate) {
         const renewalPerods = {
             daily: 1,
@@ -82,7 +81,6 @@ subscriptionSchema.pre('save', function (next) {
         this.status = 'expired';
     }
 
-    next();
 });
 
 const Subscription = mongoose.model('Subscription', subscriptionSchema);
