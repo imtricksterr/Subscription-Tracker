@@ -13,19 +13,14 @@ export const sendReminders = serve(async (context) => {
     console.log('sendReminders called for:', subscriptionId);
     const subscription = await fetchSubscription(context, subscriptionId);
 
-    console.log('subscription:', subscription);
-    console.log('subscription status:', subscription?.status);
     if(!subscription || subscription.status !== 'active') {
         console.log('stopping - subscription not active');
         return; 
     }
 
     const renewalDate = dayjs(subscription.renewalDate);
-    console.log('renewalDate:', renewalDate.format());
-    console.log('is before now:', renewalDate.isBefore(dayjs()));
 
     if(renewalDate.isBefore(dayjs())) {
-        console.log(`Renewal date has passed for subscription ${subscription}. Stopping workflow`);
         return;
     }
 
